@@ -113,6 +113,17 @@ MAKE_ENV+=		QMAKEPATH="${QT_MKSPECDIR:H}"
 # tests if the directories exist because of mkspecs/features/qt_parts.prf.
 EXTRACT_AFTER_ARGS?=	${DISTNAME:S,$,/examples,:S,^,--exclude ,} \
 				${DISTNAME:S,$,/tests,:S,^,--exclude ,}
+
+# We deliberately do not pass -I${LOCALBASE}/include and -L${LOCALBASE}/lib
+# in the FreeBSD mkspecs because in Qt5 they are always added before the
+# paths in ${WRKSRC}. In other words, if one is upgrading an existing
+# installation the old headers and libraries will always be picked up.
+# Those directories to be passed though, they just need to be passed last.
+# See QTBUG-40825 and ports/194088 for more information.
+CONFIGURE_ENV+=	CPATH=${LOCALBASE}/include \
+				LIBRARY_PATH=${LOCALBASE}/lib
+MAKE_ENV+=		CPATH=${LOCALBASE}/include \
+				LIBRARY_PATH=${LOCALBASE}/lib
 . endif # ! ${_QT_VERSION:M4*}
 
 CONFIGURE_ENV+=	MAKE="${MAKE:T}"
@@ -572,6 +583,16 @@ qtbase-pre-configure:
 		${LN} -sf ${QT_BINDIR}/${tool:T} ${CONFIGURE_WRKSRC}/bin/${tool:T} || \
 		${TRUE}
 .  endfor
+
+# Add ${LOCALBASE}/lib to DEFAULT_LIBDIRS, which we use to filter out
+# certain paths from pkg-config calls (see the explanation in
+# devel/qt5/files/patch-configure) as well as for setting
+# QMAKE_DEFAULT_LIBDIR in mkspecs/qconfig.pri. Part of the solution for
+# ports/194088.
+post-patch: qtbase-post-patch
+qtbase-post-patch:
+	${REINPLACE_CMD} -e "/DEFAULT_LIBDIRS=/ s,\\\\\"\\\\n,\\\\n${LOCALBASE}/lib&," \
+		${WRKSRC}/configure
 
 .  if ${PORTNAME} != "qmake"
 _QMAKE_WRKSRC=	${BUILD_WRKSRC}
