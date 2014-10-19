@@ -103,9 +103,10 @@ QT_DIST=		base declarative doc graphicaleffects imageformats \
 # Qt configure requires pkg-config to detect dependencies.
 USES+=			pkgconfig
 
-# Use mkspecs installed in QMAKEPATH/mkspecs when building qtbase.
-CONFIGURE_ENV+=	QMAKEPATH="${QT_MKSPECDIR:H}"
-MAKE_ENV+=		QMAKEPATH="${QT_MKSPECDIR:H}"
+# Set QMAKESPEC when building qtbase so that qmake (called by the configure
+# script) can find the mkspecs we create ourselves in devel/qmake5.
+CONFIGURE_ENV+=	QMAKESPEC="${QMAKESPEC}"
+MAKE_ENV+=		QMAKESPEC="${QMAKESPEC}"
 .  endif
 
 # -nomake is only used by qtbase's configure script.
