@@ -35,20 +35,21 @@ post-patch:
 	@${REINPLACE_CMD} -E -e '/"\$$QT_CONFIG +(${TBR_CONFIG})"/ d' \
 		${WRKSRC}/configure
 
-	@${RM} ${WRKSRC}/mkspecs/*/*.orig
-
 	@${REINPLACE_CMD} -e 's|/usr/local|${LOCALBASE}|' \
 		${WRKSRC}/mkspecs/common/freebsd.conf
 	@${REINPLACE_CMD} -e 's|unix.conf|freebsd.conf|' \
 		${WRKSRC}/mkspecs/freebsd-icc/qmake.conf
 
-# Add mkspec for Clang.
-	@${CP} -a ${WRKSRC}/mkspecs/freebsd-g++ \
+# Add mkspec for Clang. For now, this means adjusting the existing
+# unsupported/freebsd-clang mkspec while we get it into shape upstream.
+	@${MV} ${WRKSRC}/mkspecs/unsupported/freebsd-clang \
 		${WRKSRC}/mkspecs/freebsd-clang
-	@${REINPLACE_CMD} -e 's|g++|clang|g' \
-		-e '/gcc-base-unix.conf/d' \
+	@${REINPLACE_CMD} -e 's|(../|(|g' \
 		${WRKSRC}/mkspecs/freebsd-clang/qmake.conf
+	@${REINPLACE_CMD} -e 's|"../|"|g' \
+		${WRKSRC}/mkspecs/freebsd-clang/qplatformdefs.h
 
+	@${RM} ${WRKSRC}/mkspecs/*/*.orig
 	@${RM} -Rf ${WRKSRC}/mkspecs/freebsd-g++46
 
 post-build:
