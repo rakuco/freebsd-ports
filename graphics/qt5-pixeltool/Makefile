@@ -2,7 +2,6 @@
 
 PORTNAME=	pixeltool
 DISTVERSION=	${QT5_VERSION}
-PORTREVISION=	1
 CATEGORIES=	graphics
 PKGNAMEPREFIX=	qt5-
 
@@ -20,9 +19,5 @@ DESKTOP_ENTRIES="Qt 5 PixelTool" "" \
 		"Graphics;Qt;" true
 
 WRKSRC_SUBDIR=	src/${PORTNAME}
-
-post-patch:
-	@${REINPLACE_CMD} -e '/DESTDIR/ d' \
-		${WRKSRC}/pixeltool.pro
 
 .include <bsd.port.mk>

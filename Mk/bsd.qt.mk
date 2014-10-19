@@ -27,7 +27,7 @@ Qt_Pre_Include=	bsd.qt.mk
 # Qt versions currently supported by the framework.
 _QT_SUPPORTED?=	4 5
 QT4_VERSION?=	4.8.6
-QT5_VERSION?=	5.2.1
+QT5_VERSION?=	5.3.2
 
 QT_PREFIX?=		${LOCALBASE}
 
@@ -108,7 +108,9 @@ CONFIGURE_ENV+=	QMAKEPATH="${QT_MKSPECDIR:H}"
 MAKE_ENV+=		QMAKEPATH="${QT_MKSPECDIR:H}"
 .  endif
 
-# -nomake flags aren't enough.
+# -nomake is only used by qtbase's configure script.
+# Other ports from other Qt modules will automatically build examples and
+# tests if the directories exist because of mkspecs/features/qt_parts.prf.
 EXTRACT_AFTER_ARGS?=	${DISTNAME:S,$,/examples,:S,^,--exclude ,} \
 				${DISTNAME:S,$,/tests,:S,^,--exclude ,}
 . endif # ! ${_QT_VERSION:M4*}
@@ -169,9 +171,7 @@ CONFIGURE_ARGS+=-verbose
 EXTRA_PATCHES?=	${.CURDIR:H:H}/devel/${_QT_RELNAME}/files/extrapatch-configure \
 		${.CURDIR:H:H}/devel/${_QT_RELNAME}/files/extrapatch-config.tests-unix-compile.test \
 		${.CURDIR:H:H}/devel/${_QT_RELNAME}/files/extrapatch-libtool
-.  if ${_QT_VERSION:M5*}
-EXTRA_PATCHES+=	${.CURDIR:H:H}/devel/qt5-core/files/extrapatch-src__corelib__tools__qdatetime.cpp
-.  elif ${_QT_VERSION:M4*}
+.  if ${_QT_VERSION:M4*}
 EXTRA_PATCHES?=	${EXTRA_PATCHES} \
 				${.CURDIR:H:H}/devel/${_QT_RELNAME}/files/extrapatch-src-corelib-global-qglobal.h
 .  endif
@@ -582,6 +582,16 @@ post-configure: qmake-configure
 .  endif
 . endif # ${QT_DIST} == "base"
 
+# Qt 5.3.2 introduced a check in mkspecs/features/create_cmake.prf that
+# requires tests/auto/cmake to be present, otherwise the configure stage will
+# fail.
+# Since we cannot extract tests/auto/cmake/ and exclude tests/ at the same
+# time, we have to disable the check in a cache file (the only way to get this
+# value through to the configure script in qtbase).
+pre-configure: qt5-pre-configure
+qt5-pre-configure:
+	${ECHO_CMD} 'CMAKE_MODULE_TESTS = -' > ${WRKSRC}/.qmake.cache
+
 pre-install: qt-pre-install
 qt-pre-install:
 # Search both in CONFIGURE_WRKSRC and WRKSRC, as the former is not
@@ -617,9 +627,6 @@ qt-post-install:
 	@${ECHO_CMD} "${QT_INCDIR_REL}/QtCore/modules/qconfig-${QT_MODNAME}.h" \
 		>> ${TMPPLIST}
 	@${ECHO_CMD} "@exec echo '#include <QtCore/modules/qconfig-${QT_MODNAME}.h>' >> %D/${QT_INCDIR_REL}/QtCore/qconfig-modules.h" >> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_INCDIR_REL}/QtCore/modules" >> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_INCDIR_REL}/QtCore" >> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_INCDIR_REL}" >> ${TMPPLIST}
 . endif # ${QT_DEFINES:N-*}
 . if ${QT_CONFIG:N-*}
 	@${MKDIR} ${STAGEDIR}${QT_MKSPECDIR}/modules
@@ -628,10 +635,6 @@ qt-post-install:
 	@${ECHO_CMD} "@cwd ${QT_PREFIX}" >> ${TMPPLIST}
 	@${ECHO_CMD} "${QT_MKSPECDIR_REL}/modules/qt_config_${QT_MODNAME}.pri" \
 		>> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_MKSPECDIR_REL}/modules" >> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_MKSPECDIR_REL}" >> ${TMPPLIST}
-	@${ECHO_CMD} "@dirrmtry ${QT_ARCHDIR_REL}" >> ${TMPPLIST}
-	@${SED} -i "" -e '${PLIST_REINPLACE_DIRRMTRY}' ${TMPPLIST}
 . endif # ${QT_CONFIG:N-*}
 .endif # defined(QT_DIST) && ! ${_QT_VERSION:M4*}
 

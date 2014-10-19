@@ -2,7 +2,6 @@
 
 PORTNAME=	linguist
 DISTVERSION=	${QT5_VERSION}
-PORTREVISION=	1
 CATEGORIES=	devel
 PKGNAMEPREFIX=	qt5-
 
@@ -20,10 +19,6 @@ DESKTOP_ENTRIES="Qt 5 Linguist" "" \
 		"Development;Qt;" true
 
 WRKSRC_SUBDIR=	src/${PORTNAME}/${PORTNAME}
-
-post-patch:
-	@${REINPLACE_CMD} -e '/DESTDIR/ d' \
-		${WRKSRC}/linguist.pro
 
 post-install:
 	${INSTALL_DATA} ${WRKSRC}/images/icons/linguist-128-32.png \
