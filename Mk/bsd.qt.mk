@@ -308,7 +308,7 @@ _USE_QT4_ONLY=	accessible assistant-adp assistantclient codecs-cn codecs-jp \
 				qtestlib qvfb rcc uic uic3 xmlpatterns-tool
 
 _USE_QT5_ONLY=	buildtools concurrent core graphicaleffects linguisttools \
-				printsupport qdbus qdoc qev qml qmldevtools quick \
+				printsupport qdbus qdoc qev qml quick \
 				quickcontrols uitools widgets x11extras
 
 accessible_PORT=	accessibility/${_QT_RELNAME}-accessible
@@ -448,9 +448,6 @@ qmake_PATH=			${QMAKE}
 
 qml_PORT=			lang/${_QT_RELNAME}-qml
 qml_PATH=			${QT_LIBDIR}/libQt${_QT_LIBVER}Qml.so
-
-qmldevtools_PORT=	devel/${_QT_RELNAME}-qmldevtools
-qmldevtools_PATH=	${QT_LIBDIR}/libQt${_QT_LIBVER}QmlDevTools.a
 
 qmlviewer_PORT=		devel/${_QT_RELNAME}-qmlviewer
 qmlviewer_PATH=		${QT_BINDIR}/qmlviewer
