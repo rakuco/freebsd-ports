@@ -150,8 +150,7 @@ CONFIGURE_ARGS+=-fast \
 				-examplesdir ${PREFIX}/${QT_EXAMPLEDIR_REL}/examples \
 				-demosdir ${PREFIX}/${QT_EXAMPLEDIR_REL}/demos
 . else
-CONFIGURE_ARGS+=-dont-process \
-				-nomake examples -nomake tests \
+CONFIGURE_ARGS+=-nomake examples -nomake tests \
 				-archdatadir ${PREFIX}/${QT_ARCHDIR_REL} \
 				-libexecdir ${PREFIX}/${QT_LIBEXECDIR_REL} \
 				-qmldir ${PREFIX}/${QT_QMLDIR_REL} \
@@ -573,11 +572,6 @@ _QT_TOOLS+=		${UIC}
 
 pre-configure: qtbase-pre-configure
 qtbase-pre-configure:
-.  if ${PORTNAME} != "qmake"
-	@(cd ${WRKSRC} && ${SETENV} ${QMAKE_ENV} ${QMAKE} ${QMAKE_ARGS})
-# 	@${RM} -rf ${CONFIGURE_WRKSRC}/mkspecs
-# 	@${MKDIR} ${CONFIGURE_WRKSRC}/mkspecs
-.  endif
 .  for tool in ${_QT_TOOLS}
 	@${TEST} -e ${QT_BINDIR}/${tool:T} && \
 		${LN} -sf ${QT_BINDIR}/${tool:T} ${CONFIGURE_WRKSRC}/bin/${tool:T} || \
@@ -595,8 +589,6 @@ qtbase-post-patch:
 		${WRKSRC}/configure
 
 .  if ${PORTNAME} != "qmake"
-_QMAKE_WRKSRC=	${BUILD_WRKSRC}
-QMAKE_SOURCE_PATH=	${_QMAKE_WRKSRC}
 _QMAKE=			${CONFIGURE_WRKSRC}/bin/qmake
 
 post-configure: qmake-configure

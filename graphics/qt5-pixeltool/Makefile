@@ -18,6 +18,7 @@ DESKTOP_ENTRIES="Qt 5 PixelTool" "" \
 		"${PREFIX}/${QT_BINDIR_REL}/pixeltool" \
 		"Graphics;Qt;" true
 
-WRKSRC_SUBDIR=	src/${PORTNAME}
+BUILD_WRKSRC=	${WRKSRC}/src/${PORTNAME}
+INSTALL_WRKSRC=	${BUILD_WRKSRC}
 
 .include <bsd.port.mk>

@@ -25,11 +25,6 @@ INSTALL_TARGET=	install_qmake install_mkspecs
 
 BUILD_WRKSRC=	${WRKSRC}/${PORTNAME}
 
-.include <bsd.port.pre.mk>
-
-# Needs bsd.port.pre.mk to override -dont-process from bsd.qt.mk.
-CONFIGURE_ARGS+=-process
-
 post-patch:
 # Prevent qconfig.pri from being module dependent.
 	@${REINPLACE_CMD} -E -e '/"\$$QT_CONFIG +(${TBR_CONFIG})"/ d' \
@@ -62,4 +57,4 @@ post-build:
 	@${REINPLACE_CMD} -En -e '/^(CONFIG|QT_BUILD_PARTS|.*_DIR) / p' \
 		${WRKSRC}/mkspecs/qmodule.pri
 
-.include <bsd.port.post.mk>
+.include <bsd.port.mk>

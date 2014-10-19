@@ -40,12 +40,6 @@ QT_DEFINES+=	-STYLE_GTK
 QT_CONFIG+=	-gtkstyle
 .endif
 
-post-configure:
-.for d in ${MORE_WRKSRCS}
-	@cd ${WRKSRC}/${d} && \
-		${SETENV} ${QMAKE_ENV} ${WRKSRC}/bin/qmake ${QMAKE_ARGS}
-.endfor
-
 pre-build:
 	@cd ${WRKSRC}/src/tools/uic && \
 		${SETENV} ${MAKE_ENV} ${MAKE} ${MAKE_FLAGS} ${MAKEFILE} \

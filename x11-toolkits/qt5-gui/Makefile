@@ -62,12 +62,6 @@ RUN_DEPENDS+=	${LOCALBASE}/lib/X11/fonts/encodings/encodings.dir:${PORTSDIR}/x11
 
 CFLAGS_powerpc64=	-mminimal-toc
 
-post-configure:
-.for d in ${MORE_WRKSRCS}
-	@cd ${WRKSRC}/${d} && \
-		${SETENV} ${QMAKE_ENV} ${WRKSRC}/bin/qmake ${QMAKE_ARGS}
-.endfor
-
 post-build:
 .for d in ${MORE_WRKSRCS}
 	@cd ${WRKSRC}/${d} && \
