@@ -114,17 +114,6 @@ MAKE_ENV+=		QMAKESPEC="${QMAKESPEC}"
 # tests if the directories exist because of mkspecs/features/qt_parts.prf.
 EXTRACT_AFTER_ARGS?=	${DISTNAME:S,$,/examples,:S,^,--exclude ,} \
 				${DISTNAME:S,$,/tests,:S,^,--exclude ,}
-
-# We deliberately do not pass -I${LOCALBASE}/include and -L${LOCALBASE}/lib
-# in the FreeBSD mkspecs because in Qt5 they are always added before the
-# paths in ${WRKSRC}. In other words, if one is upgrading an existing
-# installation the old headers and libraries will always be picked up.
-# Those directories to be passed though, they just need to be passed last.
-# See QTBUG-40825 and ports/194088 for more information.
-CONFIGURE_ENV+=	CPATH=${LOCALBASE}/include \
-				LIBRARY_PATH=${LOCALBASE}/lib
-MAKE_ENV+=		CPATH=${LOCALBASE}/include \
-				LIBRARY_PATH=${LOCALBASE}/lib
 . endif # ! ${_QT_VERSION:M4*}
 
 CONFIGURE_ENV+=	MAKE="${MAKE:T}"
