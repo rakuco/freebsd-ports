@@ -17,9 +17,11 @@ CONFIGURE_ARGS=	-no-accessibility -no-openssl -no-gui -no-cups \
 		-no-iconv -no-icu -no-dbus -no-xcb -no-opengl \
 		-no-glib -no-audio-backend -no-fontconfig \
 		-no-gtkstyle -no-xinput2 -no-xrender \
-		-no-evdev -no-xkbcommon
+		-no-evdev -no-xkbcommon -no-alsa \
+		-no-freetype -no-gif -no-harfbuzz -no-libjpeg -no-pkg-config \
+		-no-libpng -no-pulseaudio -no-widgets
 # Features yet to be removed from qconfig.pri.
-TBR_CONFIG=	alsa|concurrent|.*freetype|.*gif|.*gui|.*harfbuzz|inotify|.*jpeg|.*pkg-config|.*png|pulseaudio|.*widgets|xlib
+TBR_CONFIG=	concurrent|inotify|xlib
 QMAKESPEC=	${WRKSRC}/mkspecs/freebsd-${QMAKE_COMPILER}
 INSTALL_TARGET=	install_qmake install_mkspecs
 
