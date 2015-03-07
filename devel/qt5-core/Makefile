@@ -36,8 +36,6 @@ QT_CONFIG=	glib icu
 .include <bsd.port.pre.mk>
 
 post-install:
-	${INSTALL_DATA} ${WRKSRC}/src/3rdparty/harfbuzz/src/harfbuzz*.h \
-		${STAGEDIR}${PREFIX}/${QT_INCDIR_REL}/QtCore/${QT5_VERSION:C/-.*//}/QtCore/private
 # Allow qconfig.h to be customized by single ports.
 	${REINPLACE_CMD} -i "" '1 s|.*|#include <QtCore/qconfig-modules.h>|' \
 		${STAGEDIR}${PREFIX}/${QT_INCDIR_REL}/QtCore/qconfig.h

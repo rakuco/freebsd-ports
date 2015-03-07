@@ -11,6 +11,7 @@ COMMENT=	Qt graphical user interface module
 LIB_DEPENDS=	libdbus-1.so:${PORTSDIR}/devel/dbus \
 		libfontconfig.so:${PORTSDIR}/x11-fonts/fontconfig \
 		libfreetype.so:${PORTSDIR}/print/freetype2 \
+		libharfbuzz.so:${PORTSDIR}/print/harfbuzz \
 		libjpeg.so:${PORTSDIR}/graphics/jpeg \
 		libpng.so:${PORTSDIR}/graphics/png \
 		libxcb.so:${PORTSDIR}/x11/libxcb \
@@ -28,7 +29,8 @@ QT_DIST=	base
 USE_XORG=	x11 xi xrender
 HAS_CONFIGURE=	yes
 CONFIGURE_ARGS=	-no-eglfs \
-		-no-evdev
+		-no-evdev \
+		-system-harfbuzz
 USE_LDCONFIG=	${PREFIX}/${QT_LIBDIR_REL}
 
 BUILD_WRKSRC=	${WRKSRC}/src/${PORTNAME}
