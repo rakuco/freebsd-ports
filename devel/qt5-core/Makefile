@@ -21,13 +21,10 @@ HAS_CONFIGURE=	yes
 CONFIGURE_ARGS=	-no-accessibility -no-gif -no-libpng -no-libjpeg \
 		-no-openssl -no-gui -no-widgets -no-cups \
 		-no-iconv -no-dbus -no-xcb -no-opengl \
-		-no-feature-glib -no-feature-alsa \
-		-no-feature-concurrent -no-feature-evdev \
-		-no-fontconfig -no-freetype \
-		-no-gtkstyle -no-feature-inotify -no-feature-libudev \
-		-no-feature-pulseaudio -no-feature-xcb -no-xinput \
-		-no-xkb -no-xrender -no-xshape -no-xsync -no-xvideo \
-		-no-xkbcommon -no-harfbuzz
+		-no-alsa -no-egl -no-evdev -no-feature-concurrent \
+		-no-fontconfig -no-freetype -no-gtkstyle -no-harfbuzz \
+		-no-libudev -no-pulseaudio -no-xcb -no-xinput -no-xkb \
+		-no-xkbcommon -no-xrender -no-xshape -no-xsync -no-xvideo
 USE_LDCONFIG=	${PREFIX}/${QT_LIBDIR_REL}
 
 BUILD_WRKSRC=	${WRKSRC}/src/corelib
