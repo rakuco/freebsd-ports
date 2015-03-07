@@ -11,6 +11,7 @@ COMMENT=	Qt core non-graphical module
 LIB_DEPENDS=	libicui18n.so:${PORTSDIR}/devel/icu \
 		libpcre.so:${PORTSDIR}/devel/pcre
 
+USES=		execinfo
 USE_GNOME=	glib20
 USE_QT5=	qmake_build buildtools_build
 QT_DIST=	base
